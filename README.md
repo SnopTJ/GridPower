@@ -50,6 +50,12 @@ python main.py --demo           # demonstração: rede de 8 pontos, Prim x Krusk
 python main.py --experimento    # experimento de complexidade (10 a 1000 vértices)
 ```
 
+## Dashboard visual (Streamlit)
+```bash
+streamlit run app.py
+```
+Abre automaticamente no navegador (http://localhost:8501). O dashboard mostra a rede em layout circular com a AGM destacada, compara Prim e Kruskal em tempo real, gera relatórios em Markdown e roda o experimento de complexidade com gráficos e download de CSV. A paleta de cores foi validada com o validador do método de visualização (CVD ΔE ≥ 9.2, visão normal ΔE ≥ 27.6 em ambos os temas).
+
 ## Testes
 ```bash
 python -m pytest                          # ou: python -m unittest discover -s tests -v
