@@ -79,9 +79,7 @@ h3 { color: #2a2a2a; font-weight: 600; }
 def _inject_css(modo_apresentacao: bool):
     css = APRESENTACAO_CSS
     if modo_apresentacao:
-        css += "<script>document.body.classList.add('apresentacao');</script>"
-    else:
-        css += "<script>document.body.classList.remove('apresentacao');</script>"
+        css = css.replace(".apresentacao ", "")
     st.markdown(css, unsafe_allow_html=True)
 
 # ────────────────────────────── FIGURAS — LAYOUT CIRCULAR GRANDE
@@ -297,6 +295,7 @@ def pagina_rede_agm(modo_apresentacao: bool):
             "A rede está **desconectada**: não existe árvore geradora que cubra todos os pontos.  "
             "Componentes isolados: " + "  |  ".join("{" + ", ".join(sorted(c)) + "}" for c in componentes)
         )
+        return
 
     # COMPARAÇÃO
     st.subheader("Prim  ×  Kruskal")
@@ -367,7 +366,7 @@ def pagina_rede_agm(modo_apresentacao: bool):
     st.code(texto_relatorio, language="markdown", line_numbers=False)
 
 # ────────────────────────────── PÁGINA: EXPERIMENTO
-def pagina_experimento(modo_apresentacao: bool):
+def pagina_experimento():
     st.title("📈  Experimento de Complexidade")
     st.caption("Tempo e memória de Prim e Kruskal em redes sintéticas conexas com |E| = 5|V|")
 
@@ -464,7 +463,7 @@ def main():
         pagina_rede_agm(modo_apresentacao)
 
     with aba2:
-        pagina_experimento(modo_apresentacao)
+        pagina_experimento()
 
 if __name__ == "__main__":
     main()

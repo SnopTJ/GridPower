@@ -48,3 +48,6 @@ relatorios/.cache/
 !.vscode-shared/
 .DS_Store
 Thumbs.db
+
+# Log local do dashboard
+streamlit.log

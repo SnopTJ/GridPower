@@ -80,5 +80,3 @@ python -m pytest --cov=src --cov-report=term-missing
 5. Vinícius Gonçalves Araújo
 6. João Victor da Conceição Alves Silva
 7. Bruno Victor Dos Santos Lima
-8. [Inserir nome 8]
-9. [Inserir nome 9]
