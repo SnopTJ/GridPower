@@ -75,10 +75,10 @@ python -m pytest --cov=src --cov-report=term-missing
 ## Equipe (Squad 2)
 1. Lázaro Alves Pereira da Silva
 2. Gabriel Geraldo Salgado dos Anjos
-3. [Nome 3]
-4. [Nome 4]
-5. [Nome 5]
-6. [Nome 6]
-7. [Nome 7]
-8. [Nome 8]
-9. [Nome 9]
+3. Nilton Clemente de Almeida Neto
+4. Gabriel Bezerra Marques
+5. [Inserir nome 5]
+6. [Inserir nome 6]
+7. [Inserir nome 7]
+8. [Inserir nome 8]
+9. [Inserir nome 9]
