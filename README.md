@@ -77,8 +77,8 @@ python -m pytest --cov=src --cov-report=term-missing
 2. Gabriel Geraldo Salgado dos Anjos
 3. Nilton Clemente de Almeida Neto
 4. Gabriel Bezerra Marques
-5. [Inserir nome 5]
-6. [Inserir nome 6]
-7. [Inserir nome 7]
+5. Vinícius Gonçalves Araújo
+6. João Victor da Conceição Alves Silva
+7. Bruno Victor Dos Santos Lima
 8. [Inserir nome 8]
 9. [Inserir nome 9]
