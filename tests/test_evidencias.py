@@ -49,6 +49,12 @@ class TestGeracaoEvidencias(unittest.TestCase):
         self.assertIn("Prim", texto)
         self.assertIn("Kruskal", texto)
 
+    def test_desenhar_rede_sem_caminho_nao_explode(self):
+        """Cobre o caminho plt.show() (exibição interativa) com backend não gráfico."""
+        import matplotlib
+        matplotlib.use("Agg")
+        desenhar_rede(self.servico.grafo, self.servico.executar_kruskal(), None)
+
 
 class TestComparacaoCaminhosRaros(unittest.TestCase):
     """Cobre os ramos de justificativa que exigem grafos especiais."""
