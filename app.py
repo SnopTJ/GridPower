@@ -221,7 +221,9 @@ def _sidebar_entrada():
                 for linha in conexoes.splitlines():
                     if not linha.strip():
                         continue
-                    partes = [p.strip() for p in linha.replace(";", ",").split(",")]
+                    # Divide em até 3 campos, preservando vírgula decimal no custo
+                    # Ex: "S1,Q1,2000,50" -> ["S1", "Q1", "2000,50"]
+                    partes = [p.strip() for p in linha.replace(";", ",").split(",", 2)]
                     if len(partes) != 3:
                         raise ValueError(f"Linha inválida: {linha!r} (use: origem, destino, custo)")
                     custo_str = partes[2].strip()
