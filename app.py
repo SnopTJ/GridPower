@@ -186,6 +186,8 @@ def _figura_rede(grafo: Grafo, mst=None, cor_destaque=COR_PRIM, titulo: str = ""
     escolhidas = mst.pares() if mst is not None else set()
 
     fig, ax = plt.subplots(figsize=(10, 8.5), dpi=120)
+    fig.patch.set_facecolor(COR_FUNDO_LIGHT)
+    ax.set_facecolor(COR_FUNDO_LIGHT)
     for a in grafo.arestas:
         (x1, y1), (x2, y2) = pos[a.origem], pos[a.destino]
         na_mst = a.chave in escolhidas
@@ -197,12 +199,13 @@ def _figura_rede(grafo: Grafo, mst=None, cor_destaque=COR_PRIM, titulo: str = ""
             zorder=1,
             alpha=0.95 if na_mst else 0.6,
         )
-        # rótulo de custo no meio da aresta
+        # rótulo de custo no meio da aresta (bem visível, fundo escuro)
         ax.text(
             (x1 + x2) / 2, (y1 + y2) / 2,
-            f"{a.custo:,.0f}".replace(",", "."),
-            fontsize=10, ha="center", va="center",
-            bbox=dict(fc="#1a1d24", ec=cor_destaque if na_mst else COR_NEUTRA, lw=1, pad=3, alpha=0.95),
+            f"R$ {a.custo:,.0f}".replace(",", "."),
+            fontsize=11, ha="center", va="center", fontweight="bold",
+            color="#e6e6e6",
+            bbox=dict(fc="#1a1d24", ec=cor_destaque if na_mst else COR_NEUTRA, lw=1.5, pad=4, alpha=0.98),
             zorder=2,
         )
     # vértices
