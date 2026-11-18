@@ -5,6 +5,7 @@ Executar:  streamlit run app.py
 """Redes de exemplo usadas na demonstração, nos testes e no artigo."""
 from src.modelos.grafo import Grafo
 from src.servicos.servico_rede import ServicoRede
+from src.utilitarios.formatacao import formatar_reais
 
 CUSTO_EXEMPLO_ARTIGO = 18500.0   # custo mínimo da rede de 8 pontos (seção A.8 do projeto)
 
@@ -353,7 +354,6 @@ def _sidebar_entrada():
 # ────────────────────────────── PÁGINA: REDE & AGM
 def pagina_rede_agm(modo_apresentacao: bool):
     from src.servicos.relatorio import gerar_relatorio_otimizacao
-    from src.utilitarios.formatacao import formatar_reais
 
     st.title("⚡ GridPower — Árvore Geradora Mínima")
     st.caption("Prim (heap)  ×  Kruskal (Union-Find)  |  Squad 2 · UrbanTech")
