@@ -42,8 +42,52 @@ def rede_exemplo_desconectada():
     return g
 
 
+def rede_exemplo_5_pontos():
+    """Rede de 5 pontos com 7 conexões; custo mínimo R$ 10.000."""
+    g = Grafo()
+    for nome in ["A", "B", "C", "D", "E"]:
+        g.adicionar_vertice(nome)
+    for a, b, custo in [("A", "B", 3000), ("A", "C", 2500),
+                        ("B", "C", 4000), ("B", "D", 2000),
+                        ("C", "E", 3500), ("D", "E", 2500),
+                        ("A", "E", 4500)]:
+        g.adicionar_aresta(a, b, custo)
+    return g
+
+
+def rede_exemplo_6_pontos():
+    """Rede de 6 pontos com 9 conexões; custo mínimo R$ 12.500."""
+    g = Grafo()
+    for nome in ["A", "B", "C", "D", "E", "F"]:
+        g.adicionar_vertice(nome)
+    for a, b, custo in [("A", "B", 3000), ("A", "C", 2000),
+                        ("B", "D", 4000), ("C", "D", 2500),
+                        ("C", "E", 3000), ("D", "F", 2000),
+                        ("E", "F", 3500), ("A", "F", 4500),
+                        ("B", "E", 3500)]:
+        g.adicionar_aresta(a, b, custo)
+    return g
+
+
+def rede_exemplo_7_pontos():
+    """Rede de 7 pontos com 10 conexões; custo mínimo R$ 15.000."""
+    g = Grafo()
+    for nome in ["A", "B", "C", "D", "E", "F", "G"]:
+        g.adicionar_vertice(nome)
+    for a, b, custo in [("A", "B", 3000), ("A", "C", 2500),
+                        ("B", "D", 4000), ("C", "D", 2500),
+                        ("C", "E", 3000), ("D", "F", 2000),
+                        ("E", "F", 3500), ("E", "G", 2000),
+                        ("F", "G", 3000), ("A", "G", 4000)]:
+        g.adicionar_aresta(a, b, custo)
+    return g
+
+
 EXEMPLOS = {
     "artigo": rede_exemplo_artigo,
     "simples": rede_exemplo_simples,
     "desconectada": rede_exemplo_desconectada,
+    "5_pontos": rede_exemplo_5_pontos,
+    "6_pontos": rede_exemplo_6_pontos,
+    "7_pontos": rede_exemplo_7_pontos,
 }

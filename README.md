@@ -45,9 +45,13 @@ urban-tech-gridpower/
 ```bash
 pip install -r requirements.txt
 
+# Modos de execução:
 python main.py                  # menu interativo
 python main.py --demo           # demonstração: rede de 8 pontos, Prim x Kruskal = R$ 18.500
 python main.py --experimento    # experimento de complexidade (10 a 1000 vértices)
+
+# Modo demonstração rápida (apenas 4 pontos):
+python main.py --demo --rapido
 ```
 
 ## Dashboard visual (Streamlit)
@@ -56,10 +60,40 @@ streamlit run app.py
 ```
 Abre automaticamente no navegador (http://localhost:8501). O dashboard mostra a rede em layout circular com a AGM destacada, compara Prim e Kruskal em tempo real, gera relatórios em Markdown e roda o experimento de complexidade com gráficos e download de CSV. A paleta de cores foi validada com o validador do método de visualização (CVD ΔE ≥ 9.2, visão normal ΔE ≥ 27.6 em ambos os temas).
 
+**Dica:** Para testes rápidos, o modo `--demo` já inclui o dashboard automaticamente.
+
 ## Testes
 ```bash
 python -m pytest                          # ou: python -m unittest discover -s tests -v
 python -m pytest --cov=src --cov-report=term-missing
+```
+
+## Exemplos de uso
+```python
+from src.dados.exemplos import rede_exemplo_artigo, rede_exemplo_simples, rede_exemplo_desconectada
+from src.algoritmos.prim import prim
+from src.algoritmos.kruskal import kruskal
+
+# Exemplo 1: Rede do artigo (8 pontos)
+g = rede_exemplo_artigo()
+agm_prim = prim(g)
+agm_kruskal = kruskal(g)
+print(f"Artigo - Custo Prim: R$ {agm_prim.custo_total:,}")
+print(f"Artigo - Custo Kruskal: R$ {agm_kruskal.custo_total:,}")
+
+# Exemplo 2: Rede simples (4 pontos)
+g = rede_exemplo_simples()
+agm_prim = prim(g)
+agm_kruskal = kruskal(g)
+print(f"Simples - Custo: R$ {agm_prim.custo_total:,}")
+
+# Exemplo 3: Rede desconectada (levanta erro)
+from src.utilitarios.excecoes import RedeDesconectadaError
+g = rede_exemplo_desconectada()
+try:
+    prim(g)
+except RedeDesconectadaError as e:
+    print(f"Rede desconectada detectada: {e}")
 ```
 
 ## Documentação
