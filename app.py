@@ -239,7 +239,7 @@ def _figura_serie(ns, serie_prim, serie_kruskal, rotulo_y, titulo) -> plt.Figure
     for lado in ("top", "right"):
         ax.spines[lado].set_visible(False)
     for lado in ("left", "bottom"):
-        ax.spines[lado].set_color="#2a2d35")
+        ax.spines[lado].set_color("#2a2d35")
         ax.spines[lado].set_linewidth(1.2)
     ax.legend(frameon=False, fontsize=12, loc="upper left")
     fig.tight_layout()
