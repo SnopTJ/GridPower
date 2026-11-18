@@ -104,10 +104,10 @@ EXEMPLOS = {
 COR_PRIM = "#2a78d6"      # azul (categorical prime)
 COR_KRUSKAL = "#eb6834"   # laranja (categorical secondary)
 COR_NEUTRA = "#898781"    # cinza neutro
-COR_FUNDO_LIGHT = "#fafafa"
-COR_FUNDO_DARK = "#2a2a2a"
-COR_TEXTO_LIGHT = "#0b0b0b"
-COR_TEXTO_DARK = "#f0f0f0"
+COR_FUNDO_LIGHT = "#0e1117"
+COR_FUNDO_DARK = "#1a1d24"
+COR_TEXTO_LIGHT = "#e6e6e6"
+COR_TEXTO_DARK = "#c8c8c8"
 
 # ────────────────────────────── CONFIGURAÇÃO DA PÁGINA
 import streamlit as st
@@ -143,21 +143,21 @@ APRESENTACAO_CSS = """
 
 /* ====== BASE (sempre ativo) ====== */
 .block-container { padding-top: 1.5rem; }
-h1 { color: #0b0b0b; font-weight: 700; margin-bottom: 0.3rem; }
-h2 { color: #1a1a1a; font-weight: 600; margin-top: 1.8rem; margin-bottom: 0.6rem; }
-h3 { color: #2a2a2a; font-weight: 600; }
-.stMetric { background: white; border: 1px solid #e1e0d9; border-radius: 12px; padding: 1rem 1.2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-.stMetric label { color: #52514e !important; font-weight: 500; }
+h1 { color: #e6e6e6; font-weight: 700; margin-bottom: 0.3rem; }
+h2 { color: #f0f0f0; font-weight: 600; margin-top: 1.8rem; margin-bottom: 0.6rem; }
+h3 { color: #f5f5f5; font-weight: 600; }
+.stMetric { background: #1a1d24; border: 1px solid #2a2d35; border-radius: 12px; padding: 1rem 1.2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+.stMetric label { color: #a0a0a0 !important; font-weight: 500; }
 .stTabs [data-baseweb="tab-list"] { gap: 0.4rem; }
-.stTabs [data-baseweb="tab"] { border-radius: 8px 8px 0 0; background: #f5f5f3; border: 1px solid #e1e0d9; border-bottom: none; transition: all 0.15s; }
-.stTabs [aria-selected="true"] { background: white !important; border-color: #c3c2b7 !important; border-bottom: 2px solid #2a78d6 !important; font-weight: 600; }
+.stTabs [data-baseweb="tab"] { border-radius: 8px 8px 0 0; background: #1a1d24; border: 1px solid #2a2d35; border-bottom: none; transition: all 0.15s; }
+.stTabs [aria-selected="true"] { background: #0e1117 !important; border-color: #2a78d6 !important; border-bottom: 2px solid #2a78d6 !important; font-weight: 600; }
 .stButton > button[kind="primary"] { background: #2a78d6; border: none; border-radius: 8px; }
-.stButton > button[kind="secondary"] { background: white; border: 1px solid #c3c2b7; border-radius: 8px; color: #0b0b0b; }
-.stButton > button:hover { filter: brightness(0.95); }
-.stExpander { border: 1px solid #e1e0d9; border-radius: 10px; background: white; }
-.stDataFrame { border: 1px solid #e1e0d9; border-radius: 8px; }
-[data-testid="stSidebar"] { background: #fafafa; border-right: 1px solid #e1e0d9; }
-.stRadio [role="radiogroup"] label { font-size: 1rem; }
+.stButton > button[kind="secondary"] { background: #1a1d24; border: 1px solid #2a2d35; border-radius: 8px; color: #e6e6e6; }
+.stButton > button:hover { filter: brightness(1.15); }
+.stExpander { border: 1px solid #2a2d35; border-radius: 10px; background: #1a1d24; }
+.stDataFrame { border: 1px solid #2a2d35; border-radius: 8px; }
+[data-testid="stSidebar"] { background: #0e1117; border-right: 1px solid #2a2d35; }
+.stRadio [role="radiogroup"] label { font-size: 1rem; color: #e6e6e6; }
 .stSlider [data-testid="stTickBar"] { display: none; }
 </style>
 """
@@ -202,13 +202,13 @@ def _figura_rede(grafo: Grafo, mst=None, cor_destaque=COR_PRIM, titulo: str = ""
             (x1 + x2) / 2, (y1 + y2) / 2,
             f"{a.custo:,.0f}".replace(",", "."),
             fontsize=10, ha="center", va="center",
-            bbox=dict(fc="white", ec=cor_destaque if na_mst else COR_NEUTRA, lw=1, pad=3, alpha=0.95),
+            bbox=dict(fc="#1a1d24", ec=cor_destaque if na_mst else COR_NEUTRA, lw=1, pad=3, alpha=0.95),
             zorder=2,
         )
     # vértices
     for nome, (x, y) in pos.items():
-        ax.scatter([x], [y], s=900, c="white", edgecolors="#0b0b0b", linewidths=2, zorder=3)
-        ax.text(x, y, nome, ha="center", va="center", fontsize=12, fontweight="bold", zorder=4)
+        ax.scatter([x], [y], s=900, c="#1a1d24", edgecolors="#e6e6e6", linewidths=2, zorder=3)
+        ax.text(x, y, nome, ha="center", va="center", fontsize=12, fontweight="bold", color="#e6e6e6", zorder=4)
     ax.set_aspect("equal")
     ax.axis("off")
     if titulo:
@@ -228,18 +228,18 @@ def _figura_serie(ns, serie_prim, serie_kruskal, rotulo_y, titulo) -> plt.Figure
                 xytext=(12, -18), fontsize=11, color=COR_KRUSKAL, fontweight="bold")
     ax.set_xscale("log")
     ax.set_yscale("log")
-    ax.set_xlabel("Número de vértices (|V|)", fontsize=13, color="#52514e", labelpad=10)
-    ax.set_ylabel(rotulo_y, fontsize=13, color="#52514e", labelpad=10)
+    ax.set_xlabel("Número de vértices (|V|)", fontsize=13, color="#a0a0a0", labelpad=10)
+    ax.set_ylabel(rotulo_y, fontsize=13, color="#a0a0a0", labelpad=10)
     ax.set_title(titulo, fontsize=16, fontweight="bold", color=COR_TEXTO_LIGHT, loc="left", pad=12)
     ax.set_xticks(ns)
-    ax.set_xticklabels([str(n) for n in ns], fontsize=11)
-    ax.tick_params(axis='y', labelsize=11, colors="#898781")
-    ax.grid(True, which="major", color="#e1e0d9", lw=1)
+    ax.set_xticklabels([str(n) for n in ns], fontsize=11, color="#c8c8c8")
+    ax.tick_params(axis='y', labelsize=11, colors="#a0a0a0")
+    ax.grid(True, which="major", color="#2a2d35", lw=1)
     ax.set_axisbelow(True)
     for lado in ("top", "right"):
         ax.spines[lado].set_visible(False)
     for lado in ("left", "bottom"):
-        ax.spines[lado].set_color("#c3c2b7")
+        ax.spines[lado].set_color="#2a2d35")
         ax.spines[lado].set_linewidth(1.2)
     ax.legend(frameon=False, fontsize=12, loc="upper left")
     fig.tight_layout()
