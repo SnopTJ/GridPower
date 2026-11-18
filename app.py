@@ -1,31 +1,116 @@
 """Dashboard visual do GridPower — Otimização da Infraestrutura Urbana por Árvore Geradora Mínima.
 Executar:  streamlit run app.py
 """
-import csv
-import io
-import math
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import streamlit as st
-
-from src.dados.exemplos import rede_exemplo_artigo, rede_exemplo_simples, rede_exemplo_desconectada
-from src.dados.gerador import gerar_rede_sintetica
+"""Redes de exemplo usadas na demonstração, nos testes e no artigo."""
 from src.modelos.grafo import Grafo
-from src.servicos.experimento import executar_experimento, perfilar
-from src.servicos.relatorio import gerar_relatorio_otimizacao
-from src.servicos.servico_rede import ServicoRede
-from src.utilitarios.formatacao import formatar_reais
+
+CUSTO_EXEMPLO_ARTIGO = 18500.0   # custo mínimo da rede de 8 pontos (seção A.8 do projeto)
+
+
+def rede_exemplo_artigo():
+    """Rede de 8 pontos e 13 conexões; AGM única com custo R$ 18.500 (Figura 1 do artigo)."""
+    g = Grafo()
+    for nome, tipo in [("S1", "subestacao"), ("Q1", "quadro"), ("Q2", "quadro"),
+                       ("E1", "estacao"), ("R1", "reservatorio"),
+                       ("P1", "distribuicao"), ("P2", "distribuicao"), ("P3", "distribuicao")]:
+        g.adicionar_vertice(nome, tipo)
+    conexoes = [("S1", "Q1", 2000), ("S1", "Q2", 2200), ("Q1", "E1", 2500),
+                ("Q1", "Q2", 2600), ("Q2", "R1", 2700), ("E1", "P1", 2800),
+                ("R1", "P2", 3000), ("P1", "P2", 3100), ("P2", "P3", 3300),
+                ("E1", "R1", 4100), ("Q1", "P1", 4500), ("R1", "P3", 4800),
+                ("S1", "E1", 5200)]
+    for a, b, custo in conexoes:
+        g.adicionar_aresta(a, b, custo)
+    return g
+
+
+def rede_exemplo_simples():
+    """Rede de 4 pontos do protótipo inicial; custo mínimo R$ 9.000."""
+    g = Grafo()
+    for nome in ["A", "B", "C", "D"]:
+        g.adicionar_vertice(nome)
+    for a, b, custo in [("A", "B", 4000), ("A", "C", 2000), ("B", "C", 5000),
+                        ("B", "D", 3000), ("C", "D", 6000)]:
+        g.adicionar_aresta(a, b, custo)
+    return g
+
+
+def rede_exemplo_desconectada():
+    """Duas ilhas de rede sem ligação entre si (para demonstrar o RF09)."""
+    g = Grafo()
+    for nome in ["A", "B", "C", "D"]:
+        g.adicionar_vertice(nome)
+    g.adicionar_aresta("A", "B", 1000)
+    g.adicionar_aresta("C", "D", 1500)
+    return g
+
+
+def rede_exemplo_5_pontos():
+    """Rede de 5 pontos com 7 conexões; custo mínimo R$ 10.000."""
+    g = Grafo()
+    for nome in ["A", "B", "C", "D", "E"]:
+        g.adicionar_vertice(nome)
+    for a, b, custo in [("A", "B", 3000), ("A", "C", 2500),
+                        ("B", "C", 4000), ("B", "D", 2000),
+                        ("C", "E", 3500), ("D", "E", 2500),
+                        ("A", "E", 4500)]:
+        g.adicionar_aresta(a, b, custo)
+    return g
+
+
+def rede_exemplo_6_pontos():
+    """Rede de 6 pontos com 9 conexões; custo mínimo R$ 12.500."""
+    g = Grafo()
+    for nome in ["A", "B", "C", "D", "E", "F"]:
+        g.adicionar_vertice(nome)
+    for a, b, custo in [("A", "B", 3000), ("A", "C", 2000),
+                        ("B", "D", 4000), ("C", "D", 2500),
+                        ("C", "E", 3000), ("D", "F", 2000),
+                        ("E", "F", 3500), ("A", "F", 4500),
+                        ("B", "E", 3500)]:
+        g.adicionar_aresta(a, b, custo)
+    return g
+
+
+def rede_exemplo_7_pontos():
+    """Rede de 7 pontos com 10 conexões; custo mínimo R$ 15.000."""
+    g = Grafo()
+    for nome in ["A", "B", "C", "D", "E", "F", "G"]:
+        g.adicionar_vertice(nome)
+    for a, b, custo in [("A", "B", 3000), ("A", "C", 2500),
+                        ("B", "D", 4000), ("C", "D", 2500),
+                        ("C", "E", 3000), ("D", "F", 2000),
+                        ("E", "F", 3500), ("E", "G", 2000),
+                        ("F", "G", 3000), ("A", "G", 4000)]:
+        g.adicionar_aresta(a, b, custo)
+    return g
+
+
+EXEMPLOS = {
+    "artigo": rede_exemplo_artigo,
+    "simples": rede_exemplo_simples,
+    "desconectada": rede_exemplo_desconectada,
+    "5_pontos": rede_exemplo_5_pontos,
+    "6_pontos": rede_exemplo_6_pontos,
+    "7_pontos": rede_exemplo_7_pontos,
+}
 
 # ────────────────────────────── PALETA VALIDADA (CVD ΔE ≥ 9.2, visão normal ΔE ≥ 27.6)
-COR_PRIM = "#2a78d6"      # azul
-COR_KRUSKAL = "#eb6834"   # laranja
-COR_NEUTRA = "#898781"    # cinza
-COR_FUNDO = "#fafafa"
-COR_TEXTO = "#0b0b0b"
+# Palette validated using CVD-aware rules: OkLab × 100 minimum ΔE ≥ 8 on adjacent pairs
+# Light mode: blue #2a78d6, orange #eb6834, gray #898781, white background
+# Dark mode: adapted from same palette
+COR_PRIM = "#2a78d6"      # azul (categorical prime)
+COR_KRUSKAL = "#eb6834"   # laranja (categorical secondary)
+COR_NEUTRA = "#898781"    # cinza neutro
+COR_FUNDO_LIGHT = "#fafafa"
+COR_FUNDO_DARK = "#2a2a2a"
+COR_TEXTO_LIGHT = "#0b0b0b"
+COR_TEXTO_DARK = "#f0f0f0"
 
 # ────────────────────────────── CONFIGURAÇÃO DA PÁGINA
+import streamlit as st
+
 st.set_page_config(
     page_title="GridPower — AGM Urbana",
     page_icon="⚡",
@@ -83,6 +168,9 @@ def _inject_css(modo_apresentacao: bool):
     st.markdown(css, unsafe_allow_html=True)
 
 # ────────────────────────────── FIGURAS — LAYOUT CIRCULAR GRANDE
+import math
+import matplotlib.pyplot as plt
+
 def _posicoes(grafo: Grafo) -> dict:
     nomes = grafo.nomes_vertices
     n = max(len(nomes), 1)
@@ -123,7 +211,7 @@ def _figura_rede(grafo: Grafo, mst=None, cor_destaque=COR_PRIM, titulo: str = ""
     ax.set_aspect("equal")
     ax.axis("off")
     if titulo:
-        ax.set_title(titulo, fontsize=16, fontweight="bold", pad=16, color=COR_TEXTO)
+        ax.set_title(titulo, fontsize=16, fontweight="bold", pad=16, color=COR_TEXTO_LIGHT)
     fig.tight_layout(pad=1.0)
     return fig
 
@@ -141,7 +229,7 @@ def _figura_serie(ns, serie_prim, serie_kruskal, rotulo_y, titulo) -> plt.Figure
     ax.set_yscale("log")
     ax.set_xlabel("Número de vértices (|V|)", fontsize=13, color="#52514e", labelpad=10)
     ax.set_ylabel(rotulo_y, fontsize=13, color="#52514e", labelpad=10)
-    ax.set_title(titulo, fontsize=16, fontweight="bold", color=COR_TEXTO, loc="left", pad=12)
+    ax.set_title(titulo, fontsize=16, fontweight="bold", color=COR_TEXTO_LIGHT, loc="left", pad=12)
     ax.set_xticks(ns)
     ax.set_xticklabels([str(n) for n in ns], fontsize=11)
     ax.tick_params(axis='y', labelsize=11, colors="#898781")
@@ -187,8 +275,8 @@ def _sidebar_entrada():
         n = st.sidebar.slider("Número de pontos (|V|)", 4, 60, 12, help="Redes sintéticas conexas com |E| = 5|V|")
         semente = st.sidebar.number_input("Semente (reprodutibilidade)", min_value=0, value=42, step=1)
         if st.sidebar.button("Gerar rede aleatória", use_container_width=True, type="primary"):
-            with st.spinner("Gerando rede conexa..."):
-                grafo = gerar_rede_sintetica(int(n), semente=int(semente))
+            from src.dados.gerador import gerar_rede_sintetica
+            grafo = gerar_rede_sintetica(int(n), semente=int(semente))
             st.session_state["grafo"] = grafo
             st.session_state["servico"] = ServicoRede(grafo)
             st.toast(f"Rede gerada: {grafo.quantidade_vertices} vértices, {grafo.quantidade_arestas} arestas", icon="🎲")
@@ -220,13 +308,12 @@ def _sidebar_entrada():
                     if not linha.strip():
                         continue
                     # Divide em até 3 campos, preservando vírgula decimal no custo
-                    # Ex: "S1,Q1,2000,50" -> ["S1", "Q1", "2000,50"]
+                    # Remove pontos que são separadores de milhar, mantém vírgula decimal
                     partes = [p.strip() for p in linha.replace(";", ",").split(",", 2)]
                     if len(partes) != 3:
                         raise ValueError(f"Linha inválida: {linha!r} (use: origem, destino, custo)")
                     custo_str = partes[2].strip()
                     # Normaliza: trata vírgula como decimal (formato brasileiro) e ponto como milhar
-                    # Remove pontos que são separadores de milhar, mantém vírgula decimal
                     if "," in custo_str:
                         # Formato com vírgula decimal: "2000,50" ou "2.000,50"
                         if "." in custo_str:
@@ -261,6 +348,10 @@ def _sidebar_entrada():
 
 # ────────────────────────────── PÁGINA: REDE & AGM
 def pagina_rede_agm(modo_apresentacao: bool):
+    from src.servicos.servico_rede import ServicoRede
+    from src.servicos.relatorio import gerar_relatorio_otimizacao
+    from src.utilitarios.formatacao import formatar_reais
+
     st.title("⚡ GridPower — Árvore Geradora Mínima")
     st.caption("Prim (heap)  ×  Kruskal (Union-Find)  |  Squad 2 · UrbanTech")
 
@@ -367,6 +458,10 @@ def pagina_rede_agm(modo_apresentacao: bool):
 
 # ────────────────────────────── PÁGINA: EXPERIMENTO
 def pagina_experimento():
+    from src.servicos.experimento import executar_experimento, perfilar
+    import csv
+    import io
+
     st.title("📈  Experimento de Complexidade")
     st.caption("Tempo e memória de Prim e Kruskal em redes sintéticas conexas com |E| = 5|V|")
 
