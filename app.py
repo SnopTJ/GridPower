@@ -505,7 +505,7 @@ def pagina_experimento():
           "Custo (R$)": formatar_reais(r["custo_prim"]),
           "Custos iguais": "✅" if r["custos_iguais"] else "❌"}
          for r in resultados],
-        use_container_width=True, hide_index=True, height=260,
+        use_container_width=True, hide_index=True,
     )
 
     # GRÁFICOS LOG-LOG GRANDES
