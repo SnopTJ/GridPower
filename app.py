@@ -39,12 +39,17 @@ def rede_exemplo_simples():
 
 
 def rede_exemplo_desconectada():
-    """Duas ilhas de rede sem ligação entre si (para demonstrar o RF09)."""
+    """Rede urbana de 6 pontos dividida em 2 ilhas isoladas (Setor Norte e Setor Sul)."""
     g = Grafo()
-    for nome in ["A", "B", "C", "D"]:
-        g.adicionar_vertice(nome)
-    g.adicionar_aresta("A", "B", 1000)
-    g.adicionar_aresta("C", "D", 1500)
+    for nome, tipo in [("Sub-A", "subestacao"), ("Q-Norte1", "quadro"), ("Q-Norte2", "quadro"),
+                       ("Sub-B", "subestacao"), ("Q-Sul1", "quadro"), ("Est-Sul", "estacao")]:
+        g.adicionar_vertice(nome, tipo)
+    # Ilha 1 (Norte)
+    g.adicionar_aresta("Sub-A", "Q-Norte1", 2000)
+    g.adicionar_aresta("Q-Norte1", "Q-Norte2", 1500)
+    # Ilha 2 (Sul - isolada da Norte)
+    g.adicionar_aresta("Sub-B", "Q-Sul1", 2500)
+    g.adicionar_aresta("Q-Sul1", "Est-Sul", 1800)
     return g
 
 
@@ -276,7 +281,7 @@ def _sidebar_entrada():
         if st.sidebar.button("Carregar exemplo desconectado", use_container_width=True):
             st.session_state["grafo"] = rede_exemplo_desconectada()
             st.session_state["servico"] = ServicoRede(st.session_state["grafo"])
-            st.toast("Rede desconectada carregada (duas ilhas)", icon="⚠️")
+            st.toast("Rede desconectada carregada (2 ilhas)", icon="⚠️")
 
     elif modo == "Aleatória":
         n = st.sidebar.slider("Número de pontos (|V|)", 4, 60, 12, help="Redes sintéticas conexas com |E| = 5|V|")
