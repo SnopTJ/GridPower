@@ -223,6 +223,8 @@ def _figura_rede(grafo: Grafo, mst=None, cor_destaque=COR_PRIM, titulo: str = ""
 def _figura_serie(ns, serie_prim, serie_kruskal, rotulo_y, titulo) -> plt.Figure:
     """Linhas de Prim e Kruskal em escala log-log com legenda e rótulos diretos."""
     fig, ax = plt.subplots(figsize=(10, 6.5), dpi=120)
+    fig.patch.set_facecolor(COR_FUNDO_LIGHT)
+    ax.set_facecolor(COR_FUNDO_LIGHT)
     ax.plot(ns, serie_prim, marker="o", ms=10, lw=3, color=COR_PRIM, label="Prim (heap)")
     ax.plot(ns, serie_kruskal, marker="s", ms=9, lw=3, ls="--", color=COR_KRUSKAL, label="Kruskal (Union-Find)")
     # rótulos diretos no último ponto
@@ -245,7 +247,7 @@ def _figura_serie(ns, serie_prim, serie_kruskal, rotulo_y, titulo) -> plt.Figure
     for lado in ("left", "bottom"):
         ax.spines[lado].set_color("#2a2d35")
         ax.spines[lado].set_linewidth(1.2)
-    ax.legend(frameon=False, fontsize=12, loc="upper left")
+    ax.legend(frameon=True, fontsize=12, loc="upper left", facecolor=COR_FUNDO_LIGHT, edgecolor="#2a2d35", labelcolor=COR_TEXTO_LIGHT)
     fig.tight_layout()
     return fig
 
