@@ -437,7 +437,7 @@ def pagina_rede_agm(modo_apresentacao: bool):
                 st.dataframe(
                     [{"Origem": a.origem, "Destino": a.destino, "Custo (R$)": formatar_reais(a.custo)}
                      for a in arvore.arestas],
-                    use_container_width=True, hide_index=True, height=300,
+                    use_container_width=True, hide_index=True,
                 )
 
     with st.expander("📋  Todas as conexões candidatas", expanded=False):
@@ -446,7 +446,7 @@ def pagina_rede_agm(modo_apresentacao: bool):
               "Custo (R$)": formatar_reais(a.custo),
               "Na AGM (Prim)": "✅" if a.chave in comparacao.prim.pares() else "❌"}
              for a in sorted(grafo.arestas, key=lambda a: a.custo)],
-            use_container_width=True, hide_index=True, height=350,
+            use_container_width=True, hide_index=True,
         )
 
     # RELATÓRIO
