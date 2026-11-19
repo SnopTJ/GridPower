@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testes e cobertura
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Dados gerados (mantém apenas o .gitkeep)
+dados/bruto/*
+!dados/bruto/.gitkeep
+dados/processado/*
+!dados/processado/.gitkeep
+
+# Relatórios gerados (evidências mantidas no repositório, mas cache local ignorado)
+relatorios/.cache/
+
+# Ambiente / IDE
+.idea/
+.vscode/*
+!.vscode-shared/
+.DS_Store
+Thumbs.db
+
+# Log local do dashboard
+streamlit.log
