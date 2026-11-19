@@ -50,8 +50,6 @@ python main.py                  # menu interativo
 python main.py --demo           # demonstração: rede de 8 pontos, Prim x Kruskal = R$ 18.500
 python main.py --experimento    # experimento de complexidade (10 a 1000 vértices)
 
-# Modo demonstração rápida (apenas 4 pontos):
-python main.py --demo --rapido
 ```
 
 ## Dashboard visual (Streamlit)

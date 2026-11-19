@@ -25,8 +25,12 @@ class Grafo:
 
     def adicionar_aresta(self, origem, destino, custo):
         """Cadastra uma conexão. Se já existir, mantém a de menor custo."""
+        if not isinstance(origem, str) or not isinstance(destino, str):
+            raise DadoInvalidoError("A origem e o destino devem ser textos.")
         if origem == destino:
             raise DadoInvalidoError("Não é permitido conectar um vértice a ele mesmo.")
+        if not origem or not destino:
+            raise DadoInvalidoError("A origem e o destino não podem ser vazios.")
         if origem not in self._vertices or destino not in self._vertices:
             raise DadoInvalidoError("Os dois vértices precisam estar cadastrados.")
         if isinstance(custo, int) and not isinstance(custo, bool):

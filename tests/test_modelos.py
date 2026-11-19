@@ -70,6 +70,22 @@ class TestGrafo(unittest.TestCase):
         v = self.g.adicionar_vertice("  D  ")
         self.assertEqual(v.nome, "D")
 
+    def test_aresta_origem_invalido(self):
+        with self.assertRaises(DadoInvalidoError):
+            self.g.adicionar_aresta([], "B", 1)
+
+    def test_aresta_destino_invalido(self):
+        with self.assertRaises(DadoInvalidoError):
+            self.g.adicionar_aresta("A", {}, 1)
+
+    def test_aresta_vazia(self):
+        with self.assertRaises(DadoInvalidoError):
+            self.g.adicionar_aresta("", "B", 1)
+
+    def test_aresta_destino_vazio(self):
+        with self.assertRaises(DadoInvalidoError):
+            self.g.adicionar_aresta("A", "", 1)
+
     def test_vertice_inexistente(self):
         with self.assertRaises(DadoInvalidoError):
             self.g.adicionar_aresta("A", "Z", 1)
