@@ -49,6 +49,15 @@ class TestGrafo(unittest.TestCase):
         with self.assertRaises(DadoInvalidoError):
             self.g.adicionar_vertice("A")
 
+    def test_nome_invalido(self):
+        for nome in (None, "", "   ", 123, 4.5):
+            with self.subTest(nome=nome), self.assertRaises(DadoInvalidoError):
+                self.g.adicionar_vertice(nome)
+
+    def test_nome_com_espacos_e_strip(self):
+        v = self.g.adicionar_vertice("  D  ")
+        self.assertEqual(v.nome, "D")
+
     def test_vertice_inexistente(self):
         with self.assertRaises(DadoInvalidoError):
             self.g.adicionar_aresta("A", "Z", 1)
