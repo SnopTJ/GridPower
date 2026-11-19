@@ -256,33 +256,29 @@ def _figura_serie(ns, serie_prim, serie_kruskal, rotulo_y, titulo) -> plt.Figure
     fig.tight_layout()
     return fig
 
-# ────────────────────────────── TOGGLE FLUTUANTE (sempre visível)
+# ────────────────────────────── TOGGLE FLUTUANTE (sempre visível no conteúdo)
 def _toggle_float(modo_apresentacao: bool):
-    """Barra flutuante no topo do conteúdo — visível apenas no modo apresentação.
+    """Botão de alternância no topo do conteúdo — sempre visível, mesmo com a barra lateral escondida.
 
-    Quando o modo apresentação está ligado o CSS esconde a barra lateral (incluindo o toggle
-    do sidebar), criando um "ponto sem saída". Esta barra no conteúdo principal é a forma
-    confiável de sair do modo.
+    Quando o modo apresentação está ligado, o CSS `.apresentacao .stSidebar { display: none }`
+    esconde a barra lateral inteira — incluindo o toggle que está dentro dela. Isso criava um
+    "ponto sem saída": o usuário ligava o modo e não conseguia desligar.
+    Este botão no conteúdo principal é a saída confiável, e também serve para ligar o modo
+    quando a barra lateral estiver escondida por qualquer outro motivo.
     """
-    if not modo_apresentacao:
-        return
-
-    col_toggle, col_atalho, _ = st.columns([3.0, 3.0, 4.0])
+    col_toggle, _ = st.columns([4.0, 8.0])
     with col_toggle:
-        if st.button(
-            "❌ Sair do modo apresentação",
-            key="sair_float",
-            help="Desliga o modo apresentação (atalho: tecla Esc)",
-            use_container_width=True,
-            type="primary",
-        ):
-            st.session_state["modo_apresentacao"] = False
+        if modo_apresentacao:
+            rotulo = "❌ Sair do modo apresentação"
+            ajuda = "Desliga o modo apresentação (barra lateral, fontes grandes)"
+            tipo = "primary"
+        else:
+            rotulo = "🖥️ Ativar modo apresentação (projetor)"
+            ajuda = "Esconde a barra lateral, aumenta fontes e figuras para projetor"
+            tipo = "secondary"
+        if st.button(rotulo, key="toggle_float", help=ajuda, use_container_width=True, type=tipo):
+            st.session_state["modo_apresentacao"] = not modo_apresentacao
             st.rerun()
-    with col_atalho:
-        st.caption(
-            "Ao sair, a barra lateral é restabelecida e o toggle "
-            "**🖥️ Modo Apresentação (projetor)** fica disponível nela para religar."
-        )
 
 
 # ────────────────────────────── SIDEBAR — ENTRADA DE DADOS
