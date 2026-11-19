@@ -55,6 +55,22 @@ class TestGeracaoEvidencias(unittest.TestCase):
         matplotlib.use("Agg")
         desenhar_rede(self.servico.grafo, self.servico.executar_kruskal(), None)
 
+    def test_desenhar_rede_com_mostrar_true_abre_janela(self):
+        """Cobre o caminho plt.show() quando mostrar=True."""
+        import matplotlib
+        matplotlib.use("Agg")
+        desenhar_rede(self.servico.grafo, self.servico.executar_kruskal(), None, mostrar=True)
+
+    def test_desenhar_rede_salva_e_nao_exibe(self):
+        """Com caminho, salva em disco e não chama plt.show()."""
+        import matplotlib
+        matplotlib.use("Agg")
+        with tempfile.TemporaryDirectory() as pasta:
+            caminho = os.path.join(pasta, "rede.png")
+            desenhar_rede(self.servico.grafo, self.servico.executar_kruskal(), caminho)
+            self.assertTrue(os.path.isfile(caminho))
+            self.assertGreater(os.path.getsize(caminho), 0)
+
 
 class TestComparacaoCaminhosRaros(unittest.TestCase):
     """Cobre os ramos de justificativa que exigem grafos especiais."""

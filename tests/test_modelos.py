@@ -54,6 +54,18 @@ class TestGrafo(unittest.TestCase):
             with self.subTest(nome=nome), self.assertRaises(DadoInvalidoError):
                 self.g.adicionar_vertice(nome)
 
+    def test_nome_invalido_lista(self):
+        with self.assertRaises(DadoInvalidoError):
+            self.g.adicionar_vertice(["A", "B"])
+
+    def test_nome_invalido_dic(self):
+        with self.assertRaises(DadoInvalidoError):
+            self.g.adicionar_vertice({"nome": "A"})
+
+    def test_nome_invalido_bytes(self):
+        with self.assertRaises(DadoInvalidoError):
+            self.g.adicionar_vertice(b"Estacao")
+
     def test_nome_com_espacos_e_strip(self):
         v = self.g.adicionar_vertice("  D  ")
         self.assertEqual(v.nome, "D")

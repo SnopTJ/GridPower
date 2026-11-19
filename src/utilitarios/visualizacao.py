@@ -20,8 +20,13 @@ def descrever_rede(grafo, mst=None):
     return "\n".join(linhas)
 
 
-def desenhar_rede(grafo, mst=None, caminho=None):
-    """Desenha a rede (layout circular). Salva em `caminho` ou abre uma janela."""
+def desenhar_rede(grafo, mst=None, caminho=None, mostrar=None):
+    """Desenha a rede (layout circular).
+
+    - Se `caminho` for informado, salva o arquivo em disco.
+    - Se `mostrar` for True (ou GRIDPOWER_MOSTRA_FIGURA=1), abre janela interativa.
+    - Se nenhum dos dois, a função desenha apenas internamente sem exibir.
+    """
     import matplotlib
     if caminho:
         matplotlib.use("Agg")
@@ -51,5 +56,5 @@ def desenhar_rede(grafo, mst=None, caminho=None):
     if caminho:
         fig.savefig(caminho, dpi=200)
         plt.close(fig)
-    elif os.environ.get("GRIDPOWER_MOSTRA_FIGURA") == "1":
+    elif mostrar if mostrar is not None else os.environ.get("GRIDPOWER_MOSTRA_FIGURA") == "1":
         plt.show()

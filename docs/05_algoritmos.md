@@ -32,7 +32,7 @@ se algum vértice não foi visitado: rede desconectada
 | Estratégia | cresce uma única árvore | une componentes |
 | Estrutura auxiliar | heap + lista de adjacência | ordenação + Union-Find |
 | Complexidade | O(E log V) | O(E log V) |
-| Cenário favorável | redes densas | redes esparsas |
+| Cenário favorável | A implementação atual de Prim é independente de densidade (heap + lista de adjacência). | A implementação atual é vantajosa em redes esparsas (E ≈ 5V). Para redes densas com matriz de adjacência, a complexidade de Prim seria O(V²). |
 
 ## Rede desconectada
 Os dois algoritmos levantam `RedeDesconectadaError`, cuja mensagem lista os componentes isolados.
