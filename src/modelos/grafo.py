@@ -12,6 +12,8 @@ class Grafo:
 
     # ----------------------------------------------------- cadastro
     def adicionar_vertice(self, nome, tipo="ponto"):
+        if nome is None or (isinstance(nome, str) and nome.strip() == ""):
+            raise DadoInvalidoError("Nome de vértice não pode ser None ou vazio.")
         nome = str(nome).strip()
         if nome in self._vertices:
             raise DadoInvalidoError(f"O ponto {nome!r} já está cadastrado.")

@@ -1,4 +1,4 @@
-"""Algoritmo de Prim com lista de adjacência e fila de prioridade (heap). O(E log V)."""
+"""Algoritmo de Prim com lista de adjacência e fila de prioridade (heap). O((V+E) log V)."""
 import heapq
 
 from src.modelos.aresta import Aresta
