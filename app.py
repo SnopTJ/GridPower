@@ -256,6 +256,35 @@ def _figura_serie(ns, serie_prim, serie_kruskal, rotulo_y, titulo) -> plt.Figure
     fig.tight_layout()
     return fig
 
+# ────────────────────────────── TOGGLE FLUTUANTE (sempre visível)
+def _toggle_float(modo_apresentacao: bool):
+    """Barra flutuante no topo do conteúdo — visível apenas no modo apresentação.
+
+    Quando o modo apresentação está ligado o CSS esconde a barra lateral (incluindo o toggle
+    do sidebar), criando um "ponto sem saída". Esta barra no conteúdo principal é a forma
+    confiável de sair do modo.
+    """
+    if not modo_apresentacao:
+        return
+
+    col_toggle, col_atalho, _ = st.columns([3.0, 3.0, 4.0])
+    with col_toggle:
+        if st.button(
+            "❌ Sair do modo apresentação",
+            key="sair_float",
+            help="Desliga o modo apresentação (atalho: tecla Esc)",
+            use_container_width=True,
+            type="primary",
+        ):
+            st.session_state["modo_apresentacao"] = False
+            st.rerun()
+    with col_atalho:
+        st.caption(
+            "Ao sair, a barra lateral é restabelecida e o toggle "
+            "**🖥️ Modo Apresentação (projetor)** fica disponível nela para religar."
+        )
+
+
 # ────────────────────────────── SIDEBAR — ENTRADA DE DADOS
 def _sidebar_entrada():
     st.sidebar.header("⚡  Entrada da Rede")
@@ -560,6 +589,9 @@ def main():
     # Sidebar (entrada + toggle apresentação)
     modo_apresentacao = _sidebar_entrada()
     _inject_css(modo_apresentacao)
+
+    # Botão flutuante de toggle (sempre visível, mesmo com sidebar escondida)
+    _toggle_float(modo_apresentacao)
 
     # Abas principais
     aba1, aba2 = st.tabs(["🌐  Rede & AGM", "📈  Experimento"])
