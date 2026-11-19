@@ -11,11 +11,11 @@ e R$ 20.000. Tempo: mediana de 30 execuções (10 para as maiores); memória: pi
 
 | \|V\| | \|E\| | Prim (ms) | Kruskal (ms) | Prim (KiB) | Kruskal (KiB) | Custo (R$) |
 |---|---|---|---|---|---|---|
-| 10 | 45 | 0.036 | 0.023 | 3.8 | 1.8 | 16,558 |
-| 50 | 250 | 0.407 | 0.294 | 16.1 | 9.8 | 154,936 |
-| 100 | 500 | 0.804 | 0.512 | 37.3 | 23.3 | 272,127 |
-| 500 | 2500 | 5.134 | 3.736 | 357.0 | 139.1 | 1,604,914 |
-| 1000 | 5000 | 11.888 | 9.531 | 908.5 | 402.6 | 3,225,832 |
+| 10 | 45 | 0.036 | 0.056 | 3.8 | 1.8 | 16,558 |
+| 50 | 250 | 0.410 | 0.442 | 16.1 | 9.8 | 154,936 |
+| 100 | 500 | 0.868 | 0.564 | 37.3 | 23.3 | 272,127 |
+| 500 | 2500 | 5.470 | 4.097 | 357.0 | 139.1 | 1,604,914 |
+| 1000 | 5000 | 15.216 | 8.369 | 908.5 | 402.6 | 3,225,832 |
 
 Gráficos: `relatorios/figuras/tempo.png` e `relatorios/figuras/memoria.png`.
 Profiling: `relatorios/profiling/perfil.txt`.
@@ -24,8 +24,11 @@ Profiling: `relatorios/profiling/perfil.txt`.
 > Rode `python main.py --experimento` na sua máquina e use os **seus** resultados na entrega e no artigo.
 
 ## Interpretação
-- Prim e Kruskal obtiveram o mesmo custo em todos os tamanhos.
-- Nas redes esparsas testadas, Kruskal foi mais rápido e usou menos memória que Prim.
-- Uma explicação plausível: Prim monta a lista de adjacência (2|E| entradas) e mantém um heap;
-  Kruskal apenas ordena as arestas e mantém estruturas de tamanho |V|.
+- Prim e Kruskal obtiveram o mesmo custo em todos os tamanhos (como esperado para AGM).
+- Memória: Kruskal usou sempre menos memória que Prim (~2,2× menos em |V|=1000), pois
+  mantém apenas estruturas de tamanho |V| (Union-Find) enquanto Prim constrói a lista de
+  adjacência (2|E| entradas) e um heap.
+- Tempo: em redes pequenas (|V| ≤ 50) o Prim foi ligeiramente mais rápido; a partir de |V|=100
+  o Kruskal passa a liderar, e a diferença cresce com o tamanho (8,4 ms contra 15,2 ms em |V|=1000).
+  O custo da ordenação das arestas (O(E log E)) fica compensado pela ausência de operações de heap.
 - Não se deve generalizar para redes densas, que não foram avaliadas.
