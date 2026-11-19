@@ -60,7 +60,7 @@ streamlit run app.py
 ```
 Abre automaticamente no navegador (http://localhost:8501). O dashboard mostra a rede em layout circular com a AGM destacada, compara Prim e Kruskal em tempo real, gera relatórios em Markdown e roda o experimento de complexidade com gráficos e download de CSV. A paleta de cores foi validada com o validador do método de visualização (CVD ΔE ≥ 9.2, visão normal ΔE ≥ 27.6 em ambos os temas).
 
-**Dica:** Para testes rápidos, o modo `--demo` já inclui o dashboard automaticamente.
+**Dica:** O modo `--demo` roda apenas no terminal. Para o dashboard visual, inicie o Streamlit separadamente: `streamlit run app.py`.
 
 ## Testes
 ```bash

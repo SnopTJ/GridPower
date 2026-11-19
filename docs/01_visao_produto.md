@@ -26,8 +26,12 @@ que liga toda a rede com o menor custo total (Árvore Geradora Mínima).
 - Permite comparar dois algoritmos clássicos e entender por que chegam ao mesmo custo.
 
 ## Fora do escopo
-Microsserviços, banco de dados, API REST, Docker e frameworks web. O foco é Python, estruturas
-discretas, algoritmos, Git/GitHub, testes, profiling e matplotlib.
+Microsserviços, banco de dados, API REST, Docker e frameworks web puros. O foco é Python,
+estruturas discretas, algoritmos, Git/GitHub, testes, profiling e matplotlib.
+
+**Observação:** O dashboard Streamlit (python -m streamlit run app.py) é uma interface
+complementar para visualização e testes rápidos. Como frameworks web estão fora do escopo,
+confirme com o professor se essa interface pode permanecer como "extra" ou se deve ser removida.
 
 ## Limitação conhecida
 A AGM é uma árvore: minimiza o custo, mas **não tem redundância**. A falha de uma conexão
