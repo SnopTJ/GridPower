@@ -7,6 +7,7 @@ Uso:
 """
 import argparse
 import os
+import sys
 
 from src.dados.exemplos import EXEMPLOS
 from src.servicos.experimento import (executar_experimento, gerar_graficos, perfilar,
@@ -16,6 +17,32 @@ from src.servicos.servico_rede import ServicoRede
 from src.utilitarios.excecoes import ErroGridPower, RedeDesconectadaError
 from src.utilitarios.formatacao import formatar_reais
 from src.utilitarios.visualizacao import descrever_rede, desenhar_rede
+
+def _configurar_codificacao():
+    """Reconfigura stdout/stderr para UTF-8 quando o console herda cp1252 (Windows).
+
+    Sem isso, caracteres como õ, ã e é são codificados como byte único e
+    renderizados como  no terminal UTF-8.
+    """
+    for nome in ("stdout", "stderr"):
+        fluxo = getattr(sys, nome, None)
+        if fluxo is None:
+            continue
+        try:
+            fluxo.reconfigure(encoding="utf-8", errors="replace")
+            continue
+        except (AttributeError, ValueError):
+            pass
+        buffer = getattr(fluxo, "buffer", None)
+        if buffer is not None:
+            try:
+                setattr(sys, nome, type(fluxo)(buffer, encoding="utf-8",
+                                               errors="replace", line_buffering=True))
+            except (TypeError, ValueError):
+                pass
+
+
+_configurar_codificacao()
 
 MENU = """
 === GRIDPOWER - Menu ===

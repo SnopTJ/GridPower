@@ -1,5 +1,6 @@
 """Visualização da rede (RF04): em texto e em imagem."""
 import math
+import os
 
 from src.utilitarios.formatacao import formatar_reais
 
@@ -50,5 +51,5 @@ def desenhar_rede(grafo, mst=None, caminho=None):
     if caminho:
         fig.savefig(caminho, dpi=200)
         plt.close(fig)
-    else:
+    elif os.environ.get("GRIDPOWER_MOSTRA_FIGURA") == "1":
         plt.show()
