@@ -30,8 +30,9 @@ Microsserviços, banco de dados, API REST, Docker e frameworks web puros. O foco
 estruturas discretas, algoritmos, Git/GitHub, testes, profiling e matplotlib.
 
 **Observação:** O dashboard Streamlit (python -m streamlit run app.py) é uma interface
-complementar para visualização e testes rápidos. Como frameworks web estão fora do escopo,
-confirme com o professor se essa interface pode permanecer como "extra" ou se deve ser removida.
+complementar para visualização e testes rápidos, autorizada pelo professor como "extra".
+Mostra a rede em layout circular com a AGM destacada, compara Prim e Kruskal em tempo real,
+gera relatórios em Markdown e roda o experimento de complexidade com gráficos e download de CSV.
 
 ## Limitação conhecida
 A AGM é uma árvore: minimiza o custo, mas **não tem redundância**. A falha de uma conexão
