@@ -57,7 +57,10 @@ class TestRedeDesconectada(unittest.TestCase):
             with self.subTest(algoritmo=algoritmo.__name__):
                 with self.assertRaises(RedeDesconectadaError) as ctx:
                     algoritmo(g)
-                self.assertEqual(sorted(ctx.exception.componentes), [["A", "B"], ["C", "D"]])
+                # Rede desconectada em 2 ilhas: Norte (3 vértices) e Sul (2 vértices + 1 estacao)
+                self.assertEqual(sorted(ctx.exception.componentes),
+                                 [["Est-Sul", "Q-Sul1", "Sub-B"],
+                                  ["Q-Norte1", "Q-Norte2", "Sub-A"]])
 
     def test_erro_e_um_value_error(self):
         with self.assertRaises(ValueError):
