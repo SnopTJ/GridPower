@@ -22,6 +22,44 @@ class TestVertice(unittest.TestCase):
             Vertice("A", "foguete")
 
 
+class TestExemplos(unittest.TestCase):
+    def test_rede_exemplo_artigo(self):
+        from src.dados.exemplos import rede_exemplo_artigo
+        g = rede_exemplo_artigo()
+        self.assertEqual(g.quantidade_vertices, 8)
+        self.assertEqual(g.quantidade_arestas, 13)
+
+    def test_rede_exemplo_simples(self):
+        from src.dados.exemplos import rede_exemplo_simples
+        g = rede_exemplo_simples()
+        self.assertEqual(g.quantidade_vertices, 4)
+        self.assertEqual(g.quantidade_arestas, 5)
+
+    def test_rede_exemplo_desconectada(self):
+        from src.dados.exemplos import rede_exemplo_desconectada
+        g = rede_exemplo_desconectada()
+        self.assertEqual(g.quantidade_vertices, 6)
+        self.assertFalse(g.eh_conexo())
+
+    def test_rede_exemplo_5_pontos(self):
+        from src.dados.exemplos import rede_exemplo_5_pontos
+        g = rede_exemplo_5_pontos()
+        self.assertEqual(g.quantidade_vertices, 5)
+        self.assertEqual(g.quantidade_arestas, 7)
+
+    def test_rede_exemplo_6_pontos(self):
+        from src.dados.exemplos import rede_exemplo_6_pontos
+        g = rede_exemplo_6_pontos()
+        self.assertEqual(g.quantidade_vertices, 6)
+        self.assertEqual(g.quantidade_arestas, 9)
+
+    def test_rede_exemplo_7_pontos(self):
+        from src.dados.exemplos import rede_exemplo_7_pontos
+        g = rede_exemplo_7_pontos()
+        self.assertEqual(g.quantidade_vertices, 7)
+        self.assertEqual(g.quantidade_arestas, 10)
+
+
 class TestAresta(unittest.TestCase):
     def test_chave_nao_depende_da_ordem(self):
         self.assertEqual(Aresta("A", "B", 1).chave, Aresta("B", "A", 1).chave)

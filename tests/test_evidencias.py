@@ -2,6 +2,7 @@
 import os
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from src.dados.exemplos import rede_exemplo_artigo
 from src.servicos.experimento import executar_experimento, gerar_graficos, perfilar
@@ -31,6 +32,22 @@ class TestGeracaoEvidencias(unittest.TestCase):
             with open(caminho, encoding="utf-8") as f:
                 self.assertEqual(f.read(), texto)
 
+    @patch("matplotlib.pyplot.show")
+    def test_desenhar_rede_sem_caminho_nao_explode(self, mock_show):
+        """Cobre o caminho plt.show() quando nenhum caminho nem mostrar=True."""
+        import matplotlib
+        matplotlib.use("Agg")
+        desenhar_rede(self.servico.grafo, self.servico.executar_kruskal(), None)
+        # Quando não há caminho e mostrar=False/None, plt.show() não é chamado
+
+    @patch("matplotlib.pyplot.show")
+    def test_desenhar_rede_com_mostrar_true_abre_janela(self, mock_show):
+        """Cobre o caminho plt.show() quando mostrar=True."""
+        import matplotlib
+        matplotlib.use("Agg")
+        desenhar_rede(self.servico.grafo, self.servico.executar_kruskal(), None, mostrar=True)
+        mock_show.assert_called_once()
+
     def test_desenhar_rede_salva_imagem(self):
         with tempfile.TemporaryDirectory() as pasta:
             caminho = os.path.join(pasta, "rede.png")
@@ -39,27 +56,17 @@ class TestGeracaoEvidencias(unittest.TestCase):
             self.assertGreater(os.path.getsize(caminho), 0)
 
     def test_desenhar_rede_sem_mst_nao_explode(self):
+        """Cobre o caminho plt.show() (exibição interativa) com backend não gráfico."""
         with tempfile.TemporaryDirectory() as pasta:
             caminho = os.path.join(pasta, "rede_sem_mst.png")
             desenhar_rede(self.servico.grafo, None, caminho)
             self.assertTrue(os.path.isfile(caminho))
+            self.assertGreater(os.path.getsize(caminho), 0)
 
     def test_perfilar_retorna_texto_com_ambos_algoritmos(self):
         texto = perfilar(n=30)
         self.assertIn("Prim", texto)
         self.assertIn("Kruskal", texto)
-
-    def test_desenhar_rede_sem_caminho_nao_explode(self):
-        """Cobre o caminho plt.show() (exibição interativa) com backend não gráfico."""
-        import matplotlib
-        matplotlib.use("Agg")
-        desenhar_rede(self.servico.grafo, self.servico.executar_kruskal(), None)
-
-    def test_desenhar_rede_com_mostrar_true_abre_janela(self):
-        """Cobre o caminho plt.show() quando mostrar=True."""
-        import matplotlib
-        matplotlib.use("Agg")
-        desenhar_rede(self.servico.grafo, self.servico.executar_kruskal(), None, mostrar=True)
 
     def test_desenhar_rede_salva_e_nao_exibe(self):
         """Com caminho, salva em disco e não chama plt.show()."""
