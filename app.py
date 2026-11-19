@@ -125,29 +125,9 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ────────────────────────────── CSS GLOBAL — MODO APRESENTAÇÃO
+# ────────────────────────────── CSS GLOBAL
 APRESENTACAO_CSS = """
 <style>
-/* ====== MODO APRESENTAÇÃO (toggle) ====== */
-.apresentacao .stSidebar { display: none !important; }
-.apresentacao .block-container { max-width: 100% !important; padding-left: 1rem !important; padding-right: 1rem !important; }
-.apresentacao h1 { font-size: 2.6rem !important; font-weight: 700 !important; }
-.apresentacao h2 { font-size: 1.9rem !important; font-weight: 600 !important; }
-.apresentacao h3 { font-size: 1.5rem !important; font-weight: 600 !important; }
-.apresentacao .stMetric { font-size: 1.6rem !important; }
-.apresentacao .stMetric label { font-size: 1.2rem !important; }
-.apresentacao .stMetric div[data-testid="stMetricValue"] { font-size: 2.2rem !important; }
-.apresentacao .stCaption, .apresentacao .stMarkdown p { font-size: 1.15rem !important; line-height: 1.5 !important; }
-.apresentacao .stDataFrame { font-size: 1.1rem !important; }
-.apresentacao .stTabs [data-baseweb="tab"] { font-size: 1.2rem !important; padding: 0.6rem 1.2rem !important; }
-.apresentacao .stButton > button { font-size: 1.15rem !important; padding: 0.6rem 1.4rem !important; }
-.apresentacao .stSelectbox label, .apresentacao .stSlider label, .apresentacao .stNumberInput label,
-.apresentacao .stTextArea label, .apresentacao .stRadio label { font-size: 1.15rem !important; }
-.apresentacao .stExpander summary { font-size: 1.2rem !important; font-weight: 600 !important; }
-.apresentacao .stCodeBlock { font-size: 1.05rem !important; }
-.apresentacao .stDownloadButton > button { font-size: 1.15rem !important; padding: 0.6rem 1.4rem !important; }
-
-/* ====== BASE (sempre ativo) ====== */
 .block-container { padding-top: 1.5rem; }
 h1 { color: #e6e6e6; font-weight: 700; margin-bottom: 0.3rem; }
 h2 { color: #f0f0f0; font-weight: 600; margin-top: 1.8rem; margin-bottom: 0.6rem; }
@@ -168,11 +148,7 @@ h3 { color: #f5f5f5; font-weight: 600; }
 </style>
 """
 
-def _inject_css(modo_apresentacao: bool):
-    css = APRESENTACAO_CSS
-    if modo_apresentacao:
-        css = css.replace(".apresentacao ", "")
-    st.markdown(css, unsafe_allow_html=True)
+st.markdown(APRESENTACAO_CSS, unsafe_allow_html=True)
 
 # ────────────────────────────── FIGURAS — LAYOUT CIRCULAR GRANDE
 import math
@@ -255,31 +231,6 @@ def _figura_serie(ns, serie_prim, serie_kruskal, rotulo_y, titulo) -> plt.Figure
     ax.legend(frameon=True, fontsize=12, loc="upper left", facecolor=COR_FUNDO_LIGHT, edgecolor="#2a2d35", labelcolor=COR_TEXTO_LIGHT)
     fig.tight_layout()
     return fig
-
-# ────────────────────────────── TOGGLE FLUTUANTE (sempre visível no conteúdo)
-def _toggle_float(modo_apresentacao: bool):
-    """Botão de alternância no topo do conteúdo — sempre visível, mesmo com a barra lateral escondida.
-
-    Quando o modo apresentação está ligado, o CSS `.apresentacao .stSidebar { display: none }`
-    esconde a barra lateral inteira — incluindo o toggle que está dentro dela. Isso criava um
-    "ponto sem saída": o usuário ligava o modo e não conseguia desligar.
-    Este botão no conteúdo principal é a saída confiável, e também serve para ligar o modo
-    quando a barra lateral estiver escondida por qualquer outro motivo.
-    """
-    col_toggle, _ = st.columns([4.0, 8.0])
-    with col_toggle:
-        if modo_apresentacao:
-            rotulo = "❌ Sair do modo apresentação"
-            ajuda = "Desliga o modo apresentação (barra lateral, fontes grandes)"
-            tipo = "primary"
-        else:
-            rotulo = "🖥️ Ativar modo apresentação (projetor)"
-            ajuda = "Esconde a barra lateral, aumenta fontes e figuras para projetor"
-            tipo = "secondary"
-        if st.button(rotulo, key="toggle_float", help=ajuda, use_container_width=True, type=tipo):
-            st.session_state["modo_apresentacao"] = not modo_apresentacao
-            st.rerun()
-
 
 # ────────────────────────────── SIDEBAR — ENTRADA DE DADOS
 def _sidebar_entrada():
@@ -373,18 +324,10 @@ def _sidebar_entrada():
             except ValueError as erro:
                 st.sidebar.error(f"Não foi possível montar a rede: {erro}")
 
-    # Toggle modo apresentação
-    st.sidebar.divider()
-    modo_apresentacao = st.sidebar.toggle(
-        "🖥️ Modo Apresentação (projetor)",
-        value=st.session_state.get("modo_apresentacao", False),
-        help="Remove a barra lateral, aumenta fontes e figuras para projetor",
-    )
-    st.session_state["modo_apresentacao"] = modo_apresentacao
-    return modo_apresentacao
+    return False
 
 # ────────────────────────────── PÁGINA: REDE & AGM
-def pagina_rede_agm(modo_apresentacao: bool):
+def pagina_rede_agm():
     from src.servicos.relatorio import gerar_relatorio_otimizacao
 
     st.title("⚡ GridPower — Árvore Geradora Mínima")
@@ -392,14 +335,13 @@ def pagina_rede_agm(modo_apresentacao: bool):
 
     if "servico" not in st.session_state:
         st.info("👈  Escolha uma rede no painel à esquerda para começar.")
-        if not modo_apresentacao:
-            st.markdown("""
-            **Como usar:**
-            1. Selecione **Exemplo do artigo (8 pts)** e clique *Carregar* para ver o caso pedagógico (R$ 18.500).
-            2. Ou gere uma **Aleatória** com a semente desejada.
-            3. Compare Prim vs Kruskal, veja as figuras, baixe o relatório.
-            4. Vá na aba **Experimento** para medir tempo/memória de 10 a 1000 vértices.
-            """)
+        st.markdown("""
+        **Como usar:**
+        1. Selecione **Exemplo do artigo (8 pts)** e clique *Carregar* para ver o caso pedagógico (R$ 18.500).
+        2. Ou gere uma **Aleatória** com a semente desejada.
+        3. Compare Prim vs Kruskal, veja as figuras, baixe o relatório.
+        4. Vá na aba **Experimento** para medir tempo/memória de 10 a 1000 vértices.
+        """)
         return
 
     grafo = st.session_state["grafo"]
@@ -582,18 +524,14 @@ def pagina_experimento():
 
 # ────────────────────────────── MAIN
 def main():
-    # Sidebar (entrada + toggle apresentação)
-    modo_apresentacao = _sidebar_entrada()
-    _inject_css(modo_apresentacao)
-
-    # Botão flutuante de toggle (sempre visível, mesmo com sidebar escondida)
-    _toggle_float(modo_apresentacao)
+    # Apenas sidebar de entrada de dados
+    _sidebar_entrada()
 
     # Abas principais
     aba1, aba2 = st.tabs(["🌐  Rede & AGM", "📈  Experimento"])
 
     with aba1:
-        pagina_rede_agm(modo_apresentacao)
+        pagina_rede_agm()
 
     with aba2:
         pagina_experimento()
