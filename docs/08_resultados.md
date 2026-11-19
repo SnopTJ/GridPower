@@ -25,10 +25,12 @@ Profiling: `relatorios/profiling/perfil.txt`.
 
 ## Interpretação
 - Prim e Kruskal obtiveram o mesmo custo em todos os tamanhos (como esperado para AGM).
-- Memória: Kruskal usou sempre menos memória que Prim (~2,2× menos em |V|=1000), pois
-  mantém apenas estruturas de tamanho |V| (Union-Find) enquanto Prim constrói a lista de
-  adjacência (2|E| entradas) e um heap.
-- Tempo: em redes pequenas (|V| ≤ 50) o Prim foi ligeiramente mais rápido; a partir de |V|=100
-  o Kruskal passa a liderar, e a diferença cresce com o tamanho (8,4 ms contra 15,2 ms em |V|=1000).
-  O custo da ordenação das arestas (O(E log E)) fica compensado pela ausência de operações de heap.
-- Não se deve generalizar para redes densas, que não foram avaliadas.
+- Tempo: o Kruskal foi mais rápido em **todos** os cinco tamanhos testados. A diferença absoluta
+  cresce com o tamanho (0,030 ms em |V|=10 contra 2,0 ms em |V|=1000), mas a razão diminui
+  (1,76× em |V|=10, 1,23× em |V|=1000), pois o custo da ordenação das arestas (O(E log E))
+  é compensado pela ausência de operações de heap. Em |V|=1000: Prim 10,7 ms, Kruskal 8,7 ms.
+- Memória: Kruskal usou sempre menos memória que Prim (~2,2× menos em |V|=1000). A vantagem
+  vem de Prim construir a lista de adjacência (2|E| entradas) mais um heap, enquanto o Kruskal
+  mantém a lista de arestas (já existente no grafo) e as estruturas Union-Find de tamanho |V|.
+  A ordenação é feita in-place sobre a lista de arestas, sem cópia adicional.
+- Não se deve generalizar para redes densas, que não foram avaliadas (|E| = 5|V| é esparsa).

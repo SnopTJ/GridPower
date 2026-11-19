@@ -16,7 +16,10 @@
 
 ## Requisitos não funcionais
 - **Corretude:** o custo retornado deve ser mínimo (verificado por força bruta em redes pequenas).
-- **Desempenho:** Prim em O(E log V) e Kruskal em O(E log V); experimento de 10 a 1000 vértices.
+- **Desempenho:** Prim em O((V+E) log V) — heap binário sobre lista de adjacência (montagem
+  O(V+E) + E operações de heap); Kruskal em O(E log E) — ordenação das arestas seguida de
+  Union-Find com caminho+união por rank (praticamente O(E)). Como E ≤ V², O(E log E) = O(E log V).
+  Experimento de 10 a 1000 vértices.
 - **Robustez:** entradas inválidas levantam `DadoInvalidoError`; rede desconectada levanta
   `RedeDesconectadaError`. Ambas herdam de `ValueError`.
 - **Manutenibilidade:** arquitetura em camadas, docstrings e testes automatizados.
