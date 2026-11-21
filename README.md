@@ -60,6 +60,11 @@ Abre automaticamente no navegador (http://localhost:8501). O dashboard mostra a 
 
 **Dica:** O modo `--demo` roda apenas no terminal. Para o dashboard visual, inicie o Streamlit separadamente: `streamlit run app.py`.
 
+### App remoto (Streamlit Cloud)
+O dashboard também está disponível online sem instalação:
+
+🔗 **[https://gridpower-ff3bfkhprismdsxgrr6byq.streamlit.app/](https://gridpower-ff3bfkhprismdsxgrr6byq.streamlit.app/)**
+
 ## Testes
 ```bash
 python -m pytest                          # ou: python -m unittest discover -s tests -v
