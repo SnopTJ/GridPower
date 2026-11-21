@@ -33,7 +33,7 @@ st.set_page_config(
 # ────────────────────────────── CSS GLOBAL
 APRESENTACAO_CSS = """
 <style>
-.block-container { padding-top: 1.5rem; }
+.block-container { padding-top: 2.8rem; }
 h1 { color: #e6e6e6; font-weight: 700; margin-bottom: 0.3rem; }
 h2 { color: #f0f0f0; font-weight: 600; margin-top: 1.8rem; margin-bottom: 0.6rem; }
 h3 { color: #f5f5f5; font-weight: 600; }
