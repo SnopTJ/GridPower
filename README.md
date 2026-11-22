@@ -2,11 +2,14 @@
 
 Projeto do **Squad 2** da plataforma **UrbanTech** (Disciplina de Matemática Discreta e Algoritmos).
 
-O GridPower recebe pontos de uma infraestrutura urbana (subestações, quadros, estações,
-reservatórios e pontos de distribuição) e as conexões candidatas com seus custos, e determina
-**quais conexões construir para ligar toda a rede com o menor custo total**. Para isso modela a
-rede como um grafo não direcionado e calcula a **Árvore Geradora Mínima (AGM)** com os algoritmos
-de **Prim** (heap) e **Kruskal** (Union-Find), comparando os resultados.
+O GridPower recebe pontos de uma infraestrutura urbana (subestações, quadros, estações, reservatórios e pontos de distribuição) e as conexões candidatas com seus custos.
+
+
+
+
+Determina quais conexões construir para ligar toda a rede com o menor custo total.
+
+Para isso modela a rede como um grafo não direcionado e calcula a **Árvore Geradora Mínima (AGM)** com os algoritmos de **Prim** (heap) e **Kruskal** (Union-Find), comparando os resultados.
 
 ## Funcionalidades (requisitos RF01 a RF10)
 | Código | Funcionalidade |
@@ -59,6 +62,11 @@ streamlit run app.py
 Abre automaticamente no navegador (http://localhost:8501). O dashboard mostra a rede em layout circular com a AGM destacada, compara Prim e Kruskal em tempo real, gera relatórios em Markdown e roda o experimento de complexidade com gráficos e download de CSV. A paleta de cores foi validada com o validador do método de visualização (CVD ΔE ≥ 9.2, visão normal ΔE ≥ 27.6 em ambos os temas).
 
 **Dica:** O modo `--demo` roda apenas no terminal. Para o dashboard visual, inicie o Streamlit separadamente: `streamlit run app.py`.
+
+### App remoto (Streamlit Cloud)
+O dashboard também está disponível online sem instalação:
+
+🔗 **[https://gridpower-ff3bfkhprismdsxgrr6byq.streamlit.app/](https://gridpower-ff3bfkhprismdsxgrr6byq.streamlit.app/)**
 
 ## Testes
 ```bash

@@ -56,6 +56,9 @@ MENU = """
  8) Gerar relatório            (RF10)
  9) Carregar rede de exemplo
 10) Rodar experimento de complexidade
+11) Remover ponto
+12) Remover conexão
+13) Alterar custo de conexão
  0) Sair
 """
 
@@ -163,6 +166,21 @@ def menu_interativo(servico=None, entrada=input, saida=print):
                     saida(f"Rede de exemplo '{nome}' carregada.")
             elif opcao == "10":
                 rodar_experimento()
+            elif opcao == "11":
+                nome = entrada("Nome do ponto a remover: ").strip()
+                servico.remover_ponto(nome)
+                saida(f"Ponto '{nome}' e suas conexões foram removidos.")
+            elif opcao == "12":
+                origem = entrada("Origem: ").strip()
+                destino = entrada("Destino: ").strip()
+                servico.remover_conexao(origem, destino)
+                saida(f"Conexão entre {origem} e {destino} removida.")
+            elif opcao == "13":
+                origem = entrada("Origem: ").strip()
+                destino = entrada("Destino: ").strip()
+                custo = ler_custo(entrada("Novo custo (R$): "))
+                servico.alterar_custo(origem, destino, custo)
+                saida(f"Custo de {origem} -- {destino} atualizado para {formatar_reais(custo)}.")
             elif opcao == "0":
                 saida("Até logo!")
                 return

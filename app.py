@@ -33,7 +33,7 @@ st.set_page_config(
 # ────────────────────────────── CSS GLOBAL
 APRESENTACAO_CSS = """
 <style>
-.block-container { padding-top: 1.5rem; }
+.block-container { padding-top: 2.8rem; }
 h1 { color: #e6e6e6; font-weight: 700; margin-bottom: 0.3rem; }
 h2 { color: #f0f0f0; font-weight: 600; margin-top: 1.8rem; margin-bottom: 0.6rem; }
 h3 { color: #f5f5f5; font-weight: 600; }
@@ -106,6 +106,29 @@ def _figura_rede(grafo: Grafo, mst=None, cor_destaque=COR_PRIM, titulo: str = ""
     fig.tight_layout(pad=1.0)
     return fig
 
+def _celula_texto(valor) -> str:
+    """Converte uma célula do data_editor em texto limpo (NaN/None vira '')."""
+    if valor is None:
+        return ""
+    if isinstance(valor, float) and math.isnan(valor):
+        return ""
+    return str(valor).strip()
+
+
+def _parse_custo_br(custo_str) -> float:
+    """Converte custo no formato brasileiro para float: '2000', '2.000', '2000,50', '2.000,50'."""
+    texto = _celula_texto(custo_str)
+    if not texto:
+        raise ValueError("custo vazio")
+    if "," in texto:
+        if "." in texto:
+            return float(texto.replace(".", "").replace(",", "."))
+        return float(texto.replace(",", "."))
+    if "." in texto and len(texto.split(".")[1]) > 2:
+        return float(texto.replace(".", ""))
+    return float(texto)
+
+
 def _figura_serie(ns, serie_prim, serie_kruskal, rotulo_y, titulo) -> plt.Figure:
     """Linhas de Prim e Kruskal em escala log-log com legenda e rótulos diretos."""
     fig, ax = plt.subplots(figsize=(10, 6.5), dpi=120)
@@ -175,54 +198,84 @@ def _sidebar_entrada():
             st.toast(f"Rede gerada: {grafo.quantidade_vertices} vértices, {grafo.quantidade_arestas} arestas", icon="🎲")
 
     else:  # Personalizada
-        st.sidebar.caption("Digite os pontos (um por linha) e conexões (origem, destino, custo).")
+        st.sidebar.caption("Preencha a tabela de pontos (Nome e Tipo) e a de conexões (Origem, Destino e Custo). Use o botão **+** no final de cada tabela para incluir mais linhas.")
         with st.sidebar.form("form_rede", clear_on_submit=False):
-            nomes = st.text_area(
-                "Pontos (um por linha)",
-                "S1\nQ1\nQ2\nE1\nR1\nP1\nP2\nP3",
-                height=140,
+            st.markdown("### 📍 Pontos")
+            pontos_input = st.data_editor(
+                [
+                    {"Nome": "S1", "Tipo": "subestacao"},
+                    {"Nome": "Q1", "Tipo": "quadro"},
+                    {"Nome": "Q2", "Tipo": "quadro"},
+                    {"Nome": "E1", "Tipo": "estacao"},
+                    {"Nome": "R1", "Tipo": "reservatorio"},
+                    {"Nome": "P1", "Tipo": "distribuicao"},
+                    {"Nome": "P2", "Tipo": "distribuicao"},
+                    {"Nome": "P3", "Tipo": "distribuicao"},
+                ],
+                column_config={
+                    "Nome": st.column_config.TextColumn("Nome", required=True),
+                    "Tipo": st.column_config.SelectboxColumn(
+                        "Tipo",
+                        options=["ponto", "subestacao", "quadro", "estacao", "reservatorio", "distribuicao"],
+                        default="ponto"
+                    ),
+                },
+                hide_index=True,
+                num_rows="dynamic",
+                key="editor_pontos",
+                width="stretch",
             )
-            conexoes = st.text_area(
-                "Conexões (origem, destino, custo)",
-                "S1,Q1,2000\nS1,Q2,2200\nQ1,E1,2500\nQ1,Q2,2600\n"
-                "Q2,R1,2700\nE1,P1,2800\nR1,P2,3000\nP1,P2,3100\n"
-                "P2,P3,3300\nE1,R1,4100\nQ1,P1,4500\nR1,P3,4800\nS1,E1,5200",
-                height=220,
+
+            st.markdown("### 🔗 Conexões")
+            # Tabela de conexões: 3 colunas (Origem, Destino, Custo) + botão para adicionar linha
+            conexoes = st.data_editor(
+                [
+                    {"Origem": "S1", "Destino": "Q1", "Custo": "2000"},
+                    {"Origem": "S1", "Destino": "Q2", "Custo": "2200"},
+                    {"Origem": "Q1", "Destino": "E1", "Custo": "2500"},
+                    {"Origem": "Q1", "Destino": "Q2", "Custo": "2600"},
+                    {"Origem": "Q2", "Destino": "R1", "Custo": "2700"},
+                    {"Origem": "E1", "Destino": "P1", "Custo": "2800"},
+                    {"Origem": "R1", "Destino": "P2", "Custo": "3000"},
+                    {"Origem": "P1", "Destino": "P2", "Custo": "3100"},
+                    {"Origem": "P2", "Destino": "P3", "Custo": "3300"},
+                    {"Origem": "E1", "Destino": "R1", "Custo": "4100"},
+                    {"Origem": "Q1", "Destino": "P1", "Custo": "4500"},
+                    {"Origem": "R1", "Destino": "P3", "Custo": "4800"},
+                    {"Origem": "S1", "Destino": "E1", "Custo": "5200"},
+                ],
+                column_config={
+                    "Origem": st.column_config.TextColumn("Origem", required=True),
+                    "Destino": st.column_config.TextColumn("Destino", required=True),
+                    "Custo": st.column_config.TextColumn("Custo (R$)", required=True),
+                },
+                hide_index=True,
+                num_rows="dynamic",
+                key="editor_conexoes",
+                width="stretch",
             )
+
             enviado = st.form_submit_button("Montar rede", use_container_width=True, type="primary")
 
         if enviado:
             try:
                 grafo = Grafo()
-                for linha in nomes.splitlines():
-                    if linha.strip():
-                        grafo.adicionar_vertice(linha.strip())
-                for linha in conexoes.splitlines():
-                    if not linha.strip():
+                for p in pontos_input:
+                    nome = _celula_texto(p.get("Nome"))
+                    tipo = _celula_texto(p.get("Tipo")) or "ponto"
+                    if nome:
+                        grafo.adicionar_vertice(nome, tipo)
+                for linha in conexoes:
+                    origem = _celula_texto(linha.get("Origem"))
+                    destino = _celula_texto(linha.get("Destino"))
+                    valor = linha.get("Custo")
+                    # Pula linhas completamente vazias (deixadas em branco)
+                    if not origem and not destino and (valor is None or _celula_texto(valor) == ""):
                         continue
-                    # Divide em até 3 campos, preservando vírgula decimal no custo
-                    # Remove pontos que são separadores de milhar, mantém vírgula decimal
-                    partes = [p.strip() for p in linha.replace(";", ",").split(",", 2)]
-                    if len(partes) != 3:
-                        raise ValueError(f"Linha inválida: {linha!r} (use: origem, destino, custo)")
-                    custo_str = partes[2].strip()
-                    # Normaliza: trata vírgula como decimal (formato brasileiro) e ponto como milhar
-                    if "," in custo_str:
-                        # Formato com vírgula decimal: "2000,50" ou "2.000,50"
-                        if "." in custo_str:
-                            # Tem ambos: "2.000,50" -> remove pontos (milhar), troca vírgula por ponto
-                            custo = float(custo_str.replace(".", "").replace(",", "."))
-                        else:
-                            # Apenas vírgula: "2000,50" -> troca vírgula por ponto
-                            custo = float(custo_str.replace(",", "."))
-                    else:
-                        # Apenas ponto: "2000" ou "2.000" (milhar)
-                        if "." in custo_str and len(custo_str.split(".")[1]) > 2:
-                            # Provavelmente milhar: "2.000" -> remove ponto
-                            custo = float(custo_str.replace(".", ""))
-                        else:
-                            custo = float(custo_str)
-                    grafo.adicionar_aresta(partes[0], partes[1], custo)
+                    if not origem or not destino:
+                        raise ValueError("Cada conexão precisa de Origem e Destino preenchidos.")
+                    custo = _parse_custo_br(valor)
+                    grafo.adicionar_aresta(origem, destino, custo)
                 st.session_state["grafo"] = grafo
                 st.session_state["servico"] = ServicoRede(grafo)
                 st.toast("Rede personalizada montada com sucesso", icon="✅")

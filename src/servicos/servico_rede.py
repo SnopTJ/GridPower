@@ -37,6 +37,16 @@ class ServicoRede:
     def cadastrar_conexao(self, origem, destino, custo):
         return self.grafo.adicionar_aresta(origem, destino, custo)
 
+    # Manutenção de rede (remoção e alteração de custo)
+    def remover_ponto(self, nome):
+        return self.grafo.remover_ponto(nome)
+
+    def remover_conexao(self, origem, destino):
+        return self.grafo.remover_conexao(origem, destino)
+
+    def alterar_custo(self, origem, destino, novo_custo):
+        return self.grafo.alterar_custo(origem, destino, novo_custo)
+
     # RF05
     def executar_prim(self, inicio=None):
         return prim(self.grafo, inicio)
