@@ -4,6 +4,9 @@ Projeto do **Squad 2** da plataforma **UrbanTech** (Disciplina de Matemática Di
 
 O GridPower recebe pontos de uma infraestrutura urbana (subestações, quadros, estações, reservatórios e pontos de distribuição) e as conexões candidatas com seus custos.
 
+
+
+
 Determina quais conexões construir para ligar toda a rede com o menor custo total.
 
 Para isso modela a rede como um grafo não direcionado e calcula a **Árvore Geradora Mínima (AGM)** com os algoritmos de **Prim** (heap) e **Kruskal** (Union-Find), comparando os resultados.

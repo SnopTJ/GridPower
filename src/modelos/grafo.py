@@ -80,5 +80,35 @@ class Grafo:
             grupos.setdefault(uf.encontrar(nome), []).append(nome)
         return list(grupos.values())
 
+    def remover_ponto(self, nome):
+        """Remove um ponto e todas as conexões associadas a ele."""
+        if nome not in self._vertices:
+            raise DadoInvalidoError(f"O ponto {nome!r} não está cadastrado.")
+        # Remove todas as arestas que envolvem este ponto
+        for a in list(self._arestas.values()):
+            if a.origem == nome or a.destino == nome:
+                del self._arestas[a.chave]
+        # Remove o ponto em si
+        del self._vertices[nome]
+
+    def remover_conexao(self, origem, destino):
+        """Remove uma conexão entre dois pontos."""
+        if origem not in self._vertices or destino not in self._vertices:
+            raise DadoInvalidoError("Os dois vértices precisam estar cadastrados.")
+        chave = frozenset([origem, destino])
+        if chave in self._arestas:
+            del self._arestas[chave]
+
+    def alterar_custo(self, origem, destino, novo_custo):
+        """Altera o custo de uma conexão existente."""
+        if origem not in self._vertices or destino not in self._vertices:
+            raise DadoInvalidoError("Os dois vértices precisam estar cadastrados.")
+        chave = frozenset([origem, destino])
+        if chave not in self._arestas:
+            raise DadoInvalidoError(f"Não existe conexão entre {origem} e {destino}.")
+        # Aresta é imutável (frozen): substitui por uma nova instância com o novo custo
+        antiga = self._arestas[chave]
+        self._arestas[chave] = Aresta(antiga.origem, antiga.destino, novo_custo)
+
     def eh_conexo(self):
         return len(self.componentes_conexos()) <= 1

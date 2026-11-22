@@ -1,17 +1,17 @@
 ===== Prim (n=1000) =====
-         32939 function calls in 0.067 seconds
+         32939 function calls in 0.028 seconds
 
    Ordered by: cumulative time
    List reduced from 16 to 12 due to restriction <12>
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.010    0.010    0.068    0.068 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\algoritmos\prim.py:9(prim)
-        1    0.046    0.046    0.048    0.048 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\modelos\grafo.py:57(lista_adjacencia)
+        1    0.010    0.010    0.030    0.030 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\algoritmos\prim.py:9(prim)
+        1    0.008    0.008    0.010    0.010 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\modelos\grafo.py:65(lista_adjacencia)
      3980    0.003    0.000    0.003    0.000 {built-in method _heapq.heappop}
     10999    0.002    0.000    0.002    0.000 {method 'append' of 'list' objects}
       999    0.001    0.000    0.002    0.000 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\modelos\aresta.py:14(__post_init__)
-     4993    0.002    0.000    0.002    0.000 {built-in method _heapq.heappush}
      7964    0.002    0.000    0.002    0.000 {built-in method builtins.len}
+     4993    0.002    0.000    0.002    0.000 {built-in method _heapq.heappush}
      1998    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
       999    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
       999    0.000    0.000    0.000    0.000 {built-in method math.isfinite}
@@ -20,13 +20,13 @@
 
 
 ===== Kruskal (n=1000) =====
-         18950 function calls in 0.017 seconds
+         18950 function calls in 0.016 seconds
 
    Ordered by: cumulative time
    List reduced from 14 to 12 due to restriction <12>
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.003    0.003    0.017    0.017 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\algoritmos\kruskal.py:7(kruskal)
+        1    0.003    0.003    0.016    0.016 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\algoritmos\kruskal.py:7(kruskal)
      3980    0.004    0.000    0.009    0.000 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\modelos\union_find.py:19(unir)
      7960    0.005    0.000    0.005    0.000 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\modelos\union_find.py:10(encontrar)
         1    0.003    0.003    0.004    0.004 {built-in method builtins.sorted}
@@ -34,9 +34,9 @@
       999    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
         1    0.000    0.000    0.000    0.000 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\modelos\union_find.py:5(__init__)
      1002    0.000    0.000    0.000    0.000 {built-in method builtins.len}
-        1    0.000    0.000    0.000    0.000 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\modelos\grafo.py:45(arestas)
+        1    0.000    0.000    0.000    0.000 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\modelos\grafo.py:53(arestas)
         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\modelos\grafo.py:41(nomes_vertices)
+        1    0.000    0.000    0.000    0.000 C:\Users\DELL\Trabalhos\GridPower\GridPower\src\modelos\grafo.py:49(nomes_vertices)
         1    0.000    0.000    0.000    0.000 <string>:2(__init__)
 
 
